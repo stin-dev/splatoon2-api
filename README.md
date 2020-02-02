@@ -1,61 +1,69 @@
-# GAS project Template with TypeScript
+# Splatoon2 API
 
-This repository is a template to develop a GoogleAppsScript project with TypeScript.
+Splatoon2のブキやギアパワーの一覧を取得するWebAPIです。
 
-## Usage
+## エントリポイント
 
-Clone from Github.
+https://script.google.com/macros/s/AKfycbzlwS3n7Sl1jG6n9jwIcv1bbGnvqQXum9R-9AIQhFKGqua2dg/exec
 
-```
-git clone https://github.com/stin-dev/gas-ts-template <your-project-name>
-cd <your-project-name>
-npm install
-```
+## 対応メソッド
 
-Install clasp with npm, and login with Google.
-```
-npm install @google/clasp -g
-clasp login
-```
+GET
 
-Create new GoogleAppsScript project. (Check [the referrence](https://github.com/google/clasp#create).)
-```
-clasp create --type standalone --title "Your GAS Project Name" --parentId "1D_Gxyv*****************************NXO7o" --rootDir ./dist
-```
+## クエリパラメータ
 
-Inject Your functions to `global` variable in `index.ts` like this:
-```ts
-declare const global: {
-  [x: string]: any;
-}
+- type: "main" | "sub" | "special" | "gear_power"
 
-import { hello } from "./hello";
+## レスポンス
 
-global.hello = () => {
-  hello();
+### Content Type
 
-  hello("GoogleAppsScript");
-}
+application/json; charset=utf-8
 
-global.doGet = (e: GoogleAppsScript.Events.DoGet) => {
-  console.log("GAS got a get request!");
+### レスポンス型定義
 
-  const params = JSON.stringify(e);
-  return HtmlService.createHtmlOutput(params);
-}
+| type | 型 |
+|:-|:-|
+| main | MainWeapon[] |
+| sub | SubWeapon[] |
+| special | SpecialWeapon[] |
+| gear_power | GearPower[] |
 
-global.doPost = (e: GoogleAppsScript.Events.DoPost) => {
-  console.log("GAS got a post request!");
-  const params = JSON.stringify(e);
-  return HtmlService.createHtmlOutput(params);
-}
-```
+## 型定義
 
-Once your development is done, push your codes to GAS project.
-```
-npm run deploy
-```
+### MainWeapon
 
-Visit https://script.google.com/d/{your-script-id}/edit, and try to run your code.
+- weaponId : number
+- weaponName : string
+- subWeaponId : number
+- specialWeaponId : number
+- category : WeaponCategory
+- isReplica : boolean
+- imageFileId : string
+- imageUrl: string
+- subWeapon? : Subweapon
+- specialWeapon? : SpecialWeapon
 
-Have a nice hack !
+### SubWeapon
+
+- weaponId : number
+- weaponName : string
+- imageFileId : string
+- imageUrl: string
+- mainWeapons? : MainWeapon[]
+
+### SpecialWeapon
+
+- weaponId : number
+- weaponName : string
+- imageFileId : string
+- imageUrl: string
+- mainWeapons? : MainWeapon[]
+
+### GearPower
+
+- gearPowerId: number
+- gearPowerName: string
+- part: "all" | "head" | "top" | "shoes"
+- imageFileId: string
+- imageUrl: string
